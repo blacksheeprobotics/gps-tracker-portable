@@ -97,11 +97,11 @@ while True:
     # Every second print out current location details if there's a fix.
     current = time.monotonic()
 
-    # Clear display:
-    #oled.fill(0)
-    #oled.show()
-
     if current - last_print >= 1.0:
+        # Clear display:
+        oled.fill(0)
+        oled.show()
+
         last_print = current
         if not gps.has_fix:
             # Try again if we don't have a fix yet.
@@ -128,15 +128,21 @@ while True:
                 gps.latitude_degrees, gps.latitude_minutes
             )
         )
+        precise_latitude = "Precise Latitude: {} degs, {:2.4f} mins".format(gps.latitude_degrees, gps.latitude_minutes)
+        draw.text((5,35), precise_latitude, font=font, fill=255)
         print(
             "Precise Longitude: {} degs, {:2.4f} mins".format(
                 gps.longitude_degrees, gps.longitude_minutes
             )
         )
+        precise_longitude = "Precise Longitude: {} degs, {:2.4f} mins".format(gps.longitude_degrees, gps.longitude_minutes)
+        draw.text((5,50), precise_longitude, font=font, fill=255)
         print("Fix quality: {}".format(gps.fix_quality))
         # Some attributes beyond latitude, longitude and timestamp are optional
         # and might not be present.  Check if they're None before trying to use!
         if gps.satellites is not None:
+            num_satellites = "# satellites: {}".format(gps.satellites)
+            draw.text((5,20), num_satellites, font=font, fill=255)
             print("# satellites: {}".format(gps.satellites))
         if gps.altitude_m is not None:
             print("Altitude: {} meters".format(gps.altitude_m))
